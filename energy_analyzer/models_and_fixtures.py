@@ -13,6 +13,7 @@ def get_first_moment_of_month(now: datetime) -> datetime:
 
 class Fault(BaseModel):
     name: str
+    fault_factor: float = 1
     # TODO: implement any additional fields needed
 
 
