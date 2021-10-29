@@ -1,3 +1,4 @@
+import time
 from enum import Enum
 from typing import Dict, List
 
@@ -48,6 +49,9 @@ class EnergyClient():
 
             current_time += relativedelta(minutes=15)
 
+        # Not used for the at-home challenge
+        # time.sleep(3)
+
         return results
 
     @staticmethod
@@ -89,6 +93,9 @@ class EnergyClient():
             })
 
             current_time += relativedelta(minutes=15)
+
+        # Not used for the at-home challenge
+        # time.sleep(3)
 
         return results
 
