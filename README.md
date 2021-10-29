@@ -3,6 +3,7 @@
 This is an at-home coding challenge for the Carbon Lighthouse interview process.
 
 Instructions:
+* Clone this repo, and run the install script. This will set up a venv for you, and install the required dependencies. 
 * Review the background information and overview of the provided code
 * Review the Sample Task to see how we would like you to format your solution
 * Provide your solution to the Challenge Task by implementing required backend functionality and tests
