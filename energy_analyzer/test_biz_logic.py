@@ -1,31 +1,25 @@
 import unittest
-from datetime import datetime
-
-from dateutil.relativedelta import relativedelta
 
 from models_and_fixtures import BUILDINGS
 
 
-class TestPart0(unittest.TestCase):
-    def test_get_baseline_energy_usage_kwh(self):
-        end = datetime.now()
-        start = end - relativedelta(hours=4)
+class TestSampleTask(unittest.TestCase):
+    def test_get_past_and_future_year_of_monthly_energy_usage_without_measures(self):
         for building in BUILDINGS:
-            result = building.get_baseline_energy_usage_kwh(start, end)
+            result = building.get_past_and_future_year_of_monthly_energy_usage_without_measures()
             # print(result)
-            # should have two years of monthly results
-            self.assertEqual(len(result), 17)
-
-    def test_get_baseline_past_and_future_year_of_monthly_energy_usage(self):
-        for building in BUILDINGS:
-            result = building.get_baseline_past_and_future_year_of_monthly_energy_usage()
-            # print(result)
-            # should have 4h of 15m results
+            # should have two years of 15m results
             self.assertEqual(len(result), 24)
 
 
-class TestPart1(unittest.TestCase):
-    pass
+class TestChallengeSampleTask(unittest.TestCase):
+    def test_get_past_and_future_year_of_monthly_energy_usage_with_measures(self):
+        for building in BUILDINGS:
+            result_without_measures = building.get_past_and_future_year_of_monthly_energy_usage_without_measures()
+            result_with_measures = building.get_past_and_future_year_of_monthly_energy_usage_with_measures()
+            # because the Challenge Task is not implemented, this assert will fail
+            self.assertLess(result_with_measures[0]['value'], result_without_measures[0]['value'])
+
 
 if __name__ == '__main__':
     unittest.main()

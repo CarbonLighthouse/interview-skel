@@ -1,10 +1,10 @@
-from typing import List
-from datetime import datetime, timedelta
+from typing import List, Optional
+from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 from pydantic import BaseModel
 
-from shared_utils.energy_client import EnergyClient, MeasureType
+from energy_client import EnergyClient, MeasureType
 
 
 def get_first_moment_of_month(now: datetime) -> datetime:
@@ -12,34 +12,31 @@ def get_first_moment_of_month(now: datetime) -> datetime:
 
 
 class Fault(BaseModel):
+    # Not used for the at-home challenge
     name: str
     fault_factor: float = 1
-    # TODO: implement any additional fields needed
+    start: datetime
+    end: datetime
 
 
 class Measure(BaseModel):
     name: str
     measure_type: MeasureType
-    faults: List[Fault]  # Note, this would actually be a reverse relation in a real data model
-    # TODO: implement any additional fields needed
-
-    def get_measure_energy_savings_kwh(self):
-        return EnergyClient.get_measure_energy_savings_kwh(self.measure_type, self.name)
+    faults: Optional[List[Fault]]  # Note, this would actually be a reverse relation in a real data model
+    start: datetime
+    end: datetime
 
 
 class Building(BaseModel):
     name: str
-    measures: List[Measure]  # Note, this would actually be a reverse relation in a real data model
+    measures: Optional[List[Measure]]  # Note, this would actually be a reverse relation in a real data model
 
-    def get_baseline_energy_usage_kwh(self, start, end):
-        return EnergyClient.get_baseline_energy_usage_kwh(start, end, self.name)
-
-    def get_baseline_past_and_future_year_of_monthly_energy_usage(self):
+    def get_past_and_future_year_of_monthly_energy_usage_without_measures(self):
         now = get_first_moment_of_month(datetime.now())
         start = now - relativedelta(years=1)
         end = now + relativedelta(years=1)
 
-        quarter_hourly_data = self.get_baseline_energy_usage_kwh(start, end)
+        quarter_hourly_data = EnergyClient.get_building_expected_energy_usage(start, end, self.name)
 
         current_time = get_first_moment_of_month(start)
 
@@ -49,13 +46,13 @@ class Building(BaseModel):
             if quarter_hourly_data_index >= len(quarter_hourly_data):
                 break
 
-            bucket_time = quarter_hourly_data[quarter_hourly_data_index]['timestamp']
+            bucket_timestamp = quarter_hourly_data[quarter_hourly_data_index]['timestamp']
 
             bucket_sum = 0
-            while bucket_time < (current_time + relativedelta(months=1)):
+            while bucket_timestamp < (current_time + relativedelta(months=1)):
                 if quarter_hourly_data_index >= len(quarter_hourly_data):
                     break
-                bucket_time = quarter_hourly_data[quarter_hourly_data_index]['timestamp']
+                bucket_timestamp = quarter_hourly_data[quarter_hourly_data_index]['timestamp']
                 bucket_sum += quarter_hourly_data[quarter_hourly_data_index]['value']
                 quarter_hourly_data_index += 1
             results.append({
@@ -66,10 +63,14 @@ class Building(BaseModel):
 
         return results
 
+    def get_past_and_future_year_of_monthly_energy_usage_with_measures(self):
+        # Please provide your solution here.
+        return self.get_past_and_future_year_of_monthly_energy_usage_without_measures()
+
 
 BUILDINGS = [
     Building(name="Building 1", measures=[
-        Measure(name="Building 1 - Measure 1", measure_type=MeasureType.SCHEDULING),
-        Measure(name="Building 1 - Measure 2", measure_type=MeasureType.SAT_RESET),
+        Measure(name="Building 1 - Measure 1", measure_type=MeasureType.SCHEDULING, start=datetime(year=2020, month=1, day=1), end=datetime(year=2022, month=1, day=1)),
+        Measure(name="Building 1 - Measure 2", measure_type=MeasureType.SAT_RESET, start=datetime(year=2020, month=1, day=1), end=datetime(year=2022, month=1, day=1)),
     ])
 ]
