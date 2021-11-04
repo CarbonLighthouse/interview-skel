@@ -1,5 +1,6 @@
-from typing import List, Optional
+from collections import defaultdict
 from datetime import datetime
+from typing import List, Optional
 
 from dateutil.relativedelta import relativedelta
 from pydantic import BaseModel
@@ -38,35 +39,17 @@ class Building(BaseModel):
 
         quarter_hourly_data = EnergyClient.get_building_expected_energy_usage(start, end, self.name)
 
-        current_time = get_first_moment_of_month(start)
+        bucket_res = defaultdict(int)
+        for quarter_hour_usage in quarter_hourly_data:
+            bucket_ts = get_first_moment_of_month(quarter_hour_usage["timestamp"])
+            bucket_res[bucket_ts] += quarter_hour_usage["value"]
 
-        results = []
-        quarter_hourly_data_index = 0
-        while current_time < end:
-            if quarter_hourly_data_index >= len(quarter_hourly_data):
-                break
+        return [{"timestamp": ts, "value": v} for ts, v in bucket_res.items()]
 
-            bucket_timestamp = quarter_hourly_data[quarter_hourly_data_index]['timestamp']
-
-            bucket_sum = 0
-            while bucket_timestamp < (current_time + relativedelta(months=1)):
-                if quarter_hourly_data_index >= len(quarter_hourly_data):
-                    break
-                bucket_timestamp = quarter_hourly_data[quarter_hourly_data_index]['timestamp']
-                bucket_sum += quarter_hourly_data[quarter_hourly_data_index]['value']
-                quarter_hourly_data_index += 1
-            results.append({
-                'timestamp': current_time,
-                'value': bucket_sum
-            })
-            current_time += relativedelta(months=1)
-
-        return results
 
     def get_past_and_future_year_of_monthly_energy_usage_with_measures(self):
         # Please provide your solution here.
-        return self.get_past_and_future_year_of_monthly_energy_usage_without_measures()
-
+        raise NotImplementedError()
 
 BUILDINGS = [
     Building(name="Building 1", measures=[
