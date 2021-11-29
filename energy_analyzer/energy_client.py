@@ -1,3 +1,4 @@
+import random
 import time
 from enum import Enum
 from typing import Dict, List
@@ -66,12 +67,12 @@ class EnergyClient():
         [
             {
                 'timestamp': 2010-01-01 00:00:00,
-                'value': 200
+                'value': 201
             },
             ...
             {
                 'timestamp': 2010-12-21 23:45:00,
-                'value': 200
+                'value': 205
             },
         ]
         """
@@ -89,7 +90,7 @@ class EnergyClient():
         while current_time < end:
             results.append({
                 'timestamp': current_time,
-                'value': _SAVINGS_BY_MEASURE[measure_type]
+                'value': _SAVINGS_BY_MEASURE[measure_type] + random.randint(0, 10)
             })
 
             current_time += relativedelta(minutes=15)

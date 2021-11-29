@@ -13,11 +13,14 @@ Instructions:
 
 ### Background
 
-A core part of Carbon Lighthouse’s product is to recommend, implement, and monitor various projects that reduce the energy usage of a building. We call these projects, "Energy Efficiency Measures." measure can be replacing a piece of equipment with a more efficient one, changing the schedule of a building, or a variety of other things.
+A core part of Carbon Lighthouse’s product is to recommend, implement, and monitor various projects that reduce the energy usage of a building. We call these projects "Energy Efficiency Measures." A Measure can be replacing a piece of equipment with a more efficient one, changing the schedule of a building, or a variety of other things.
 
-We have built a number of machine learning and physics based models that can predict the expected energy usage of various building types as well as the expected energy savings of various measures. We have also built a backend service that can run these models via an API. This repo provides a stubbed API for this service, and we will ask you to build on top of it
+We have built a number of machine learning and physics based models that can predict the expected energy usage of various building types as well as the expected energy savings of various measures.
+We have also built a backend service that can run these models via an API. This repo provides a stubbed API for this service, and we will ask you to build on top of it
 
-For this coding challenge, imagine we are building a new customer-facing application, the “Energy Analyzer”, that can present the results of running these models. We will ask you to implement some backend business logic, not a full backend system or a full application with a UI.
+For this coding challenge, imagine we are building a new customer-facing application, the “Energy Analyzer”, that can present the results of running these models. 
+We will ask you to implement some backend business logic, not a full backend system or a full application with a UI.
+In this example, we model a generic year's worth of savings for each Measure, which can be used to predict future energy savings.
 
 ### Code overview
 

@@ -12,8 +12,12 @@ def get_first_moment_of_month(now: datetime) -> datetime:
     return now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
 
 
-class Fault(BaseModel):
-    # Not used for the at-home challenge
+class Fault(BaseModel):  # Not used for the at-home challenge
+    """
+    This model represents a Faulty measure, and is used to adjust the savings
+    of a measure over a specific time range. For a given measure, you can
+    assume that there are no overlapping faults.
+    """
     name: str
     fault_factor: float = 1
     start: datetime
@@ -21,16 +25,25 @@ class Fault(BaseModel):
 
 
 class Measure(BaseModel):
+    """
+    This model represents an Energy Efficiency Measure, including a time range that
+    describes when that measure was implemented / active on a building.
+    """
     name: str
     measure_type: MeasureType
-    faults: Optional[List[Fault]]  # Note, this would actually be a reverse relation in a real data model
+    faults: Optional[List[Fault]]  # not used for the at-home challenge
     start: datetime
     end: datetime
 
 
 class Building(BaseModel):
+    """
+    This model represents the overall Building in which we are looking to reduce energy usage.
+    Each Building has a list of Energy Efficiency Measures which provide energy savings over
+    a given time frame.
+    """
     name: str
-    measures: Optional[List[Measure]]  # Note, this would actually be a reverse relation in a real data model
+    measures: Optional[List[Measure]]
 
     def get_past_and_future_year_of_monthly_energy_usage_without_measures(self):
         now = get_first_moment_of_month(datetime.now())
@@ -62,8 +75,16 @@ BUILDINGS = [
         Measure(
             name="Building 1 - Measure 2",
             measure_type=MeasureType.SAT_RESET,
-            start=datetime(year=2020, month=1, day=1),
+            start=datetime(year=2021, month=1, day=1),
             end=datetime(year=2022, month=1, day=1)
         ),
+    ]),
+    Building(name="Building 2", measures=[
+        Measure(
+            name="Building 2 - Measure 1",
+            measure_type=MeasureType.LED_RETROFIT,
+            start=datetime(year=2020, month=6, day=1),
+            end=datetime(year=2023, month=1, day=1)
+        )
     ])
 ]
