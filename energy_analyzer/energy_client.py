@@ -66,12 +66,12 @@ class EnergyClient():
         [
             {
                 'timestamp': 2010-01-01 00:00:00,
-                'value': 201
+                'value': 200
             },
             ...
             {
                 'timestamp': 2010-12-21 23:45:00,
-                'value': 205
+                'value': 200
             },
         ]
         """
