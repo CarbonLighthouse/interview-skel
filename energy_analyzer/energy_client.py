@@ -90,7 +90,7 @@ class EnergyClient():
         while current_time < end:
             results.append({
                 'timestamp': current_time,
-                'value': _SAVINGS_BY_MEASURE[measure_type] + random.randint(0, 10)
+                'value': _SAVINGS_BY_MEASURE[measure_type]
             })
 
             current_time += relativedelta(minutes=15)
