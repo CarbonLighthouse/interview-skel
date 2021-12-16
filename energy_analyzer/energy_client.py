@@ -19,7 +19,7 @@ def round_to_last_15m(dt):
 
 class EnergyClient():
     @staticmethod
-    def get_building_expected_energy_usage(start: datetime, end: datetime, building_name: str) -> List[Dict]:
+    def get_building_expected_energy_usage(start: datetime, end: datetime, _building_name: str) -> List[Dict]:
         """
         This API call will return a list of dicts that represents timeseries data at 15 minute intervals.
 
@@ -55,7 +55,7 @@ class EnergyClient():
         return results
 
     @staticmethod
-    def get_measure_expected_energy_savings(measure_type: MeasureType, measure_name: str) -> List[Dict]:
+    def get_measure_expected_energy_savings(measure_type: MeasureType, _measure_name: str) -> List[Dict]:
         """
         This API call will return a list of dicts that represents timeseries data at 15 minute intervals.
 
@@ -75,13 +75,16 @@ class EnergyClient():
             },
         ]
         """
-        # These values are hard-coded in this example, but represent an energy savings prediction.
+        # These values are hard-coded in this example, but represent an energy
+        # savings prediction that would normally vary over time.
+        # Your solution should account for situations where these values are not static.
         _SAVINGS_BY_MEASURE = {
             MeasureType.SCHEDULING: 100,
             MeasureType.SAT_RESET: 200,
             MeasureType.LED_RETROFIT: 300,
             MeasureType.AHU_VFD: 400,
         }
+
         current_time = datetime(year=2010, month=1, day=1)
         end = current_time + relativedelta(years=1)
         results = []

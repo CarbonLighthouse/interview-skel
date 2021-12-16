@@ -64,27 +64,3 @@ class Building(BaseModel):
         # Please provide your solution here.
         raise NotImplementedError()
 
-BUILDINGS = [
-    Building(name="Building 1", measures=[
-        Measure(
-            name="Building 1 - Measure 1",
-            measure_type=MeasureType.SCHEDULING,
-            start=datetime(year=2020, month=1, day=1),
-            end=datetime(year=2022, month=1, day=1)
-        ),
-        Measure(
-            name="Building 1 - Measure 2",
-            measure_type=MeasureType.SAT_RESET,
-            start=datetime(year=2021, month=1, day=1),
-            end=datetime(year=2022, month=1, day=1)
-        ),
-    ]),
-    Building(name="Building 2", measures=[
-        Measure(
-            name="Building 2 - Measure 1",
-            measure_type=MeasureType.LED_RETROFIT,
-            start=datetime(year=2020, month=6, day=1),
-            end=datetime(year=2023, month=1, day=1)
-        )
-    ])
-]
