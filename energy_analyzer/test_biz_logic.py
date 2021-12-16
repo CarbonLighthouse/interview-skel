@@ -60,8 +60,6 @@ class TestChallengeSampleTask(unittest.TestCase):
             result_without_measures = (
                 building.get_past_and_future_year_of_monthly_energy_usage_without_measures()
             )
-            print(result_with_measures)
-            print(result_without_measures)
             # this should pass once the Challenge task has been completed correctly
             for with_measures, without_measures in zip(
                 result_with_measures, result_without_measures
