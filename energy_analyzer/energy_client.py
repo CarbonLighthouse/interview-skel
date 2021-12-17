@@ -1,9 +1,11 @@
 import time
 from enum import Enum
-from typing import Dict, List
+from typing import Dict, List, Union
 
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
+
+Timeseries = List[Dict[str, Union[int, datetime]]]
 
 
 class MeasureType(Enum):
@@ -13,13 +15,15 @@ class MeasureType(Enum):
     AHU_VFD = 4
 
 
-def round_to_last_15m(dt):
+def round_to_last_15m(dt) -> datetime:
     return dt - (dt - datetime.min) % timedelta(minutes=15)
 
 
-class EnergyClient():
+class EnergyClient:
     @staticmethod
-    def get_building_expected_energy_usage(start: datetime, end: datetime, building_name: str) -> List[Dict]:
+    def get_building_expected_energy_usage(
+        start: datetime, end: datetime, _building_name: str
+    ) -> Timeseries:
         """
         This API call will return a list of dicts that represents timeseries data at 15 minute intervals.
 
@@ -42,10 +46,14 @@ class EnergyClient():
         results = []
 
         while current_time < end:
-            results.append({
-                'timestamp': current_time,
-                'value': 1000  # This value is hard-coded in this example, but represents an energy prediction.
-            })
+            results.append(
+                {
+                    "timestamp": current_time,
+                    # This value is hard-coded in this example,
+                    # but represents an energy prediction that would normally vary over time.
+                    "value": 1000,
+                }
+            )
 
             current_time += relativedelta(minutes=15)
 
@@ -55,7 +63,9 @@ class EnergyClient():
         return results
 
     @staticmethod
-    def get_measure_expected_energy_savings(measure_type: MeasureType, measure_name: str) -> List[Dict]:
+    def get_measure_expected_energy_savings(
+        measure_type: MeasureType, _measure_name: str
+    ) -> Timeseries:
         """
         This API call will return a list of dicts that represents timeseries data at 15 minute intervals.
 
@@ -75,22 +85,24 @@ class EnergyClient():
             },
         ]
         """
-        # These values are hard-coded in this example, but represent an energy savings prediction.
+        # These values are hard-coded in this example, but represent an energy
+        # savings prediction that would normally vary over time.
+        # Your solution should account for situations where these values are not static.
         _SAVINGS_BY_MEASURE = {
             MeasureType.SCHEDULING: 100,
             MeasureType.SAT_RESET: 200,
             MeasureType.LED_RETROFIT: 300,
             MeasureType.AHU_VFD: 400,
         }
+
         current_time = datetime(year=2010, month=1, day=1)
         end = current_time + relativedelta(years=1)
         results = []
 
         while current_time < end:
-            results.append({
-                'timestamp': current_time,
-                'value': _SAVINGS_BY_MEASURE[measure_type]
-            })
+            results.append(
+                {"timestamp": current_time, "value": _SAVINGS_BY_MEASURE[measure_type]}
+            )
 
             current_time += relativedelta(minutes=15)
 
@@ -98,4 +110,3 @@ class EnergyClient():
         # time.sleep(3)
 
         return results
-
