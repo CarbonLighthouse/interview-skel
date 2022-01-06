@@ -1,5 +1,6 @@
 import unittest
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from .models import Building, Measure, MeasureType, get_first_moment_of_month
 
 # These fixtures are provided as an overview of what a building setup could look like.
@@ -48,10 +49,6 @@ class TestSampleTask(unittest.TestCase):
 
 
 class TestChallengeSampleTask(unittest.TestCase):
-    @staticmethod
-    def _measure_is_active_for_month(measure: Measure, timestamp: datetime) -> bool:
-        return get_first_moment_of_month(measure.start) <= timestamp < measure.end
-
     def test_get_past_and_future_year_of_monthly_energy_usage_with_measures(self):
         for building in BUILDINGS:
             result_with_measures = (
@@ -66,12 +63,61 @@ class TestChallengeSampleTask(unittest.TestCase):
             ):
                 ts = with_measures["timestamp"]
                 if any(
-                    self._measure_is_active_for_month(measure, ts)
+                    get_first_moment_of_month(measure.start) <= ts < measure.end
                     for measure in building.measures
                 ):
                     self.assertLess(with_measures["value"], without_measures["value"])
                 else:
                     self.assertEqual(with_measures["value"], without_measures["value"])
+
+    def test_partial_month_coverage(self):
+        start_of_month = get_first_moment_of_month(datetime.now())
+
+        building_partial_coverage = Building(
+            name="Building Partial Coverage",
+            measures=[
+                Measure(
+                    name="Measure Partial Coverage",
+                    measure_type=MeasureType.SAT_RESET,
+                    start=datetime(
+                        year=start_of_month.year,
+                        month=start_of_month.month,
+                        day=6,
+                    ),
+                    end=datetime(
+                        year=start_of_month.year,
+                        month=start_of_month.month,
+                        day=15,
+                    ),
+                )
+            ],
+        )
+
+        building_full_coverage = Building(
+            name="Building Full Coverage",
+            measures=[
+                Measure(
+                    name="Measure Full Coverage",
+                    measure_type=MeasureType.SAT_RESET,
+                    start=start_of_month,
+                    end=start_of_month + relativedelta(months=1)
+                )
+            ]
+        )
+
+        result_partial_coverage = (
+            building_partial_coverage.get_past_and_future_year_of_monthly_energy_usage_with_measures()
+        )
+        result_full_coverage = (
+            building_full_coverage.get_past_and_future_year_of_monthly_energy_usage_with_measures()
+        )
+
+        for partial_coverage, full_coverage in zip(result_partial_coverage, result_full_coverage):
+            ts = partial_coverage["timestamp"]
+            if ts.year == start_of_month.year and ts.month == start_of_month.month:
+                self.assertLess(partial_coverage["value"], full_coverage["value"])
+
+
 
 
 if __name__ == "__main__":

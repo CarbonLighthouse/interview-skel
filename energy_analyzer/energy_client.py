@@ -1,4 +1,3 @@
-import time
 from enum import Enum
 from typing import Dict, List, Union
 
@@ -13,6 +12,17 @@ class MeasureType(Enum):
     SAT_RESET = 2
     LED_RETROFIT = 3
     AHU_VFD = 4
+
+
+# These values are hard-coded in this example, but represent an energy
+# savings prediction that would normally vary over time.
+# Your solution should account for situations where these values are not static.
+_SAVINGS_BY_MEASURE = {
+    MeasureType.SCHEDULING: 100,
+    MeasureType.SAT_RESET: 200,
+    MeasureType.LED_RETROFIT: 300,
+    MeasureType.AHU_VFD: 400,
+}
 
 
 def round_to_last_15m(dt) -> datetime:
@@ -85,16 +95,6 @@ class EnergyClient:
             },
         ]
         """
-        # These values are hard-coded in this example, but represent an energy
-        # savings prediction that would normally vary over time.
-        # Your solution should account for situations where these values are not static.
-        _SAVINGS_BY_MEASURE = {
-            MeasureType.SCHEDULING: 100,
-            MeasureType.SAT_RESET: 200,
-            MeasureType.LED_RETROFIT: 300,
-            MeasureType.AHU_VFD: 400,
-        }
-
         current_time = datetime(year=2010, month=1, day=1)
         end = current_time + relativedelta(years=1)
         results = []
