@@ -49,6 +49,8 @@ class TestSampleTask(unittest.TestCase):
 
 
 class TestChallengeSampleTask(unittest.TestCase):
+
+    # this should pass once the Challenge task has been completed correctly
     def test_get_past_and_future_year_of_monthly_energy_usage_with_measures(self):
         for building in BUILDINGS:
             result_with_measures = (
@@ -57,7 +59,6 @@ class TestChallengeSampleTask(unittest.TestCase):
             result_without_measures = (
                 building.get_past_and_future_year_of_monthly_energy_usage_without_measures()
             )
-            # this should pass once the Challenge task has been completed correctly
             for with_measures, without_measures in zip(
                 result_with_measures, result_without_measures
             ):
@@ -70,6 +71,7 @@ class TestChallengeSampleTask(unittest.TestCase):
                 else:
                     self.assertEqual(with_measures["value"], without_measures["value"])
 
+    # this should pass once the Challenge task has been completed correctly
     def test_partial_month_coverage(self):
         start_of_month = get_first_moment_of_month(datetime.now())
 
