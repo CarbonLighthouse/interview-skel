@@ -100,9 +100,9 @@ class TestChallengeSampleTask(unittest.TestCase):
                     name="Measure Full Coverage",
                     measure_type=MeasureType.SAT_RESET,
                     start=start_of_month,
-                    end=start_of_month + relativedelta(months=1)
+                    end=start_of_month + relativedelta(months=1),
                 )
-            ]
+            ],
         )
 
         result_partial_coverage = (
@@ -112,12 +112,12 @@ class TestChallengeSampleTask(unittest.TestCase):
             building_full_coverage.get_past_and_future_year_of_monthly_energy_usage_with_measures()
         )
 
-        for partial_coverage, full_coverage in zip(result_partial_coverage, result_full_coverage):
+        for partial_coverage, full_coverage in zip(
+            result_partial_coverage, result_full_coverage
+        ):
             ts = partial_coverage["timestamp"]
             if ts.year == start_of_month.year and ts.month == start_of_month.month:
                 self.assertLess(partial_coverage["value"], full_coverage["value"])
-
-
 
 
 if __name__ == "__main__":
