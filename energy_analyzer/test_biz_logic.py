@@ -1,7 +1,7 @@
 import unittest
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from .models import Building, Measure, MeasureType, get_first_moment_of_month
+from models import Building, Measure, MeasureType, get_first_moment_of_month
 
 # These fixtures are provided as an overview of what a building setup could look like.
 # Note that the dates on which measures are active do not necessarily overlap. Feel
@@ -119,7 +119,7 @@ class TestChallengeSampleTask(unittest.TestCase):
         ):
             ts = partial_coverage["timestamp"]
             if ts.year == start_of_month.year and ts.month == start_of_month.month:
-                self.assertLess(partial_coverage["value"], full_coverage["value"])
+                self.assertLess(full_coverage["value"], partial_coverage["value"])
 
 
 if __name__ == "__main__":
