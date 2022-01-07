@@ -34,10 +34,8 @@ This task has already been completed for you.
 
 Implement a method on the Building model, called `get_past_and_future_year_of_monthly_energy_usage_without_measures` that returns monthly expected energy usage data. It should return data ranging from one year in the past to one year in the future. This method should sum the 15m data returned by the EnergyClient for each month. It will ignore any measure present.
 
-Note: The provided tests are not complete. For your solution, more tests will likely be required.
-
 ### Challenge Task
 
 Implement a method on the Building model, called `get_past_and_future_year_of_monthly_energy_usage_with_measures` that returns monthly expected energy usage data. It should return data ranging from one year in the past to one year in the future. This method should sum the 15m data returned by the EnergyClient for each month. Unlike the last task, it should also see what measures are attached to the building and reduce the returned energy usage accordingly. A correct solution will take into account the start and end times for each measure.
 
-Note: We have provided a failing test for this task. However, that test alone is not sufficient to guarantee a correct solution.
+Note: We have provided some failing tests for this task. However, those tests alone are not sufficient to guarantee a correct solution.
