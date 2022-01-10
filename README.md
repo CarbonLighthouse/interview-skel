@@ -24,7 +24,7 @@ In this example, we model a generic year's worth of savings for each Measure, wh
 
 ### Code overview
 
-* `energy_analyzer/models_and_fixtures.py`: Provides a simple data model and all business logic for the Energy Analyzer. Also contains fixtures to facilitate running tests.
+* `energy_analyzer/models.py`: Provides a simple data model and all business logic for the Energy Analyzer. Also contains fixtures to facilitate running tests.
 * `energy_analyzer/energy_client.py`: Provides the stubbed API as mentioned above. It has two methods defined: 1) get the expected energy usage for a building and 2) get the expected energy savings for a measure. Read the doc string of `EnergyClient` methods for more detail.
 * `energy_analyzer/test_biz_logic.py`: Tests for the Energy Analyzer business logic.
 
