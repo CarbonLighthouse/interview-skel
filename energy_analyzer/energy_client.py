@@ -3,8 +3,15 @@ from typing import Dict, List, Union
 
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
+from pydantic import BaseModel
 
-Timeseries = List[Dict[str, Union[int, datetime]]]
+
+class DataPoint(BaseModel):
+    timestamp: datetime
+    value: float
+
+
+Timeseries = List[DataPoint]
 
 
 class MeasureType(Enum):
@@ -32,24 +39,24 @@ def round_to_last_15m(dt) -> datetime:
 class EnergyClient:
     @staticmethod
     def get_building_expected_energy_usage(
-        start: datetime, end: datetime, _building_name: str
+        start: datetime, end: datetime
     ) -> Timeseries:
         """
-        This API call will return a list of dicts that represents timeseries data at 15 minute intervals.
+        This API call will return a list of DataPoints that represents timeseries data at 15 minute intervals.
 
         The start and end dates determine the range of the result.
 
         Ex. result:
         [
-            {
-                'timestamp': 2021-09-16 22:00:00,
-                'value': 1000
-            },
+            DataPoint(
+                timestamp=2021-09-16 22:00:00,
+                value=1000
+            ),
             ...
-            {
-                'timestamp': 2021-010-16 22:00:00,
-                'value': 1000
-            },
+            DataPoint(
+                timestamp=2021-010-16 22:00:00,
+                value=1000
+            ),
         ]
         """
         current_time = round_to_last_15m(start)
@@ -57,12 +64,12 @@ class EnergyClient:
 
         while current_time < end:
             results.append(
-                {
-                    "timestamp": current_time,
+                DataPoint(
+                    timestamp=current_time,
                     # This value is hard-coded in this example,
                     # but represents an energy prediction that would normally vary over time.
-                    "value": 1000,
-                }
+                    value=1000,
+                )
             )
 
             current_time += relativedelta(minutes=15)
@@ -73,26 +80,26 @@ class EnergyClient:
         return results
 
     @staticmethod
-    def get_measure_expected_energy_savings(
-        measure_type: MeasureType, _measure_name: str
+    def get_measure_expected_energy_savings_for_generic_year(
+        measure_type: MeasureType,
     ) -> Timeseries:
         """
-        This API call will return a list of dicts that represents timeseries data at 15 minute intervals.
+        This API call will return a list of DataPoints that represents timeseries data at 15 minute intervals.
 
         The result represents the expected savings over an average year. The year will be set to `2010`, but
         that year should be ignored: this data represents an arbitrary year, not a specific year.
 
         Ex. result:
         [
-            {
-                'timestamp': 2010-01-01 00:00:00,
-                'value': 200
-            },
+            DataPoint(
+                timestamp=2010-01-01 00:00:00,
+                value=200
+            ),
             ...
-            {
-                'timestamp': 2010-12-21 23:45:00,
-                'value': 200
-            },
+            DataPoint(
+                timestamp=2010-12-21 23:45:00,
+                value=200
+            ),
         ]
         """
         current_time = datetime(year=2010, month=1, day=1)
@@ -101,7 +108,9 @@ class EnergyClient:
 
         while current_time < end:
             results.append(
-                {"timestamp": current_time, "value": _SAVINGS_BY_MEASURE[measure_type]}
+                DataPoint(
+                    timestamp=current_time, value=_SAVINGS_BY_MEASURE[measure_type]
+                )
             )
 
             current_time += relativedelta(minutes=15)

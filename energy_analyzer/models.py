@@ -5,7 +5,7 @@ from typing import List, Optional
 from dateutil.relativedelta import relativedelta
 from pydantic import BaseModel
 
-from energy_client import EnergyClient, MeasureType, Timeseries
+from energy_client import EnergyClient, MeasureType, Timeseries, DataPoint
 
 
 def get_first_moment_of_month(now: datetime) -> datetime:
@@ -37,6 +37,19 @@ class Measure(BaseModel):
     start: datetime
     end: datetime
 
+    # Implement this function for the at home challenge
+    def get_savings_for_date_range(self, start: datetime, end: datetime) -> Timeseries:
+        """
+        Takes in a start and end date and returns the expected measure savings. For example,
+        when this function is called from `get_past_and_future_year_of_monthly_energy_usage`,
+        it should return timeseries data that matches the shape of the building energy usage
+        data.
+
+        A correct solution will account for whether the measure is active or not during the
+        given time range.
+        """
+        raise NotImplementedError()
+
 
 class Building(BaseModel):
     """
@@ -48,26 +61,33 @@ class Building(BaseModel):
     name: str
     measures: Optional[List[Measure]]
 
-    def get_past_and_future_year_of_monthly_energy_usage_without_measures(
-        self,
+    def get_past_and_future_year_of_monthly_energy_usage(
+        self, include_measure_savings: Optional[bool] = False
     ) -> Timeseries:
         now = get_first_moment_of_month(datetime.now())
         start = now - relativedelta(years=1)
         end = now + relativedelta(years=1)
 
-        quarter_hourly_data = EnergyClient.get_building_expected_energy_usage(
-            start, end, self.name
+        quarter_hourly_usage_data = EnergyClient.get_building_expected_energy_usage(
+            start, end
         )
 
+        if include_measure_savings:
+            # for the challenge, you will implement `measure.get_savings_for_date_range`
+            savings_by_measure = [
+                measure.get_savings_for_date_range(start, end)
+                for measure in self.measures
+            ]
+
+            for usage_data, *savings_data_args in zip(
+                quarter_hourly_usage_data, *savings_by_measure
+            ):
+                for savings_data in savings_data_args:
+                    usage_data.value -= savings_data.value
+
         bucket_res = defaultdict(int)
-        for quarter_hour_usage in quarter_hourly_data:
-            bucket_ts = get_first_moment_of_month(quarter_hour_usage["timestamp"])
-            bucket_res[bucket_ts] += quarter_hour_usage["value"]
+        for quarter_hour_usage in quarter_hourly_usage_data:
+            bucket_ts = get_first_moment_of_month(quarter_hour_usage.timestamp)
+            bucket_res[bucket_ts] += quarter_hour_usage.value
 
-        return [{"timestamp": ts, "value": v} for ts, v in bucket_res.items()]
-
-    def get_past_and_future_year_of_monthly_energy_usage_with_measures(
-        self,
-    ) -> Timeseries:
-        # Please provide your solution here.
-        raise NotImplementedError()
+        return [DataPoint(timestamp=ts, value=v) for ts, v in bucket_res.items()]
