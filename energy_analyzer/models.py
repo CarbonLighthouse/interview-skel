@@ -73,7 +73,7 @@ class Building(BaseModel):
         )
 
         if include_measure_savings:
-            # for the challenge, you will implement `measure.get_savings_for_date_range`
+            # this code will break until you implement `measure.get_savings_for_date_range`
             savings_by_measure = [
                 measure.get_savings_for_date_range(start, end)
                 for measure in self.measures
@@ -85,9 +85,9 @@ class Building(BaseModel):
                 for savings_data in savings_data_args:
                     usage_data.value -= savings_data.value
 
-        bucket_res = defaultdict(int)
+        monthly_usage = defaultdict(int)
         for quarter_hour_usage in quarter_hourly_usage_data:
-            bucket_ts = get_first_moment_of_month(quarter_hour_usage.timestamp)
-            bucket_res[bucket_ts] += quarter_hour_usage.value
+            month_timestamp = get_first_moment_of_month(quarter_hour_usage.timestamp)
+            monthly_usage[month_timestamp] += quarter_hour_usage.value
 
-        return [DataPoint(timestamp=ts, value=v) for ts, v in bucket_res.items()]
+        return [DataPoint(timestamp=ts, value=v) for ts, v in monthly_usage.items()]
