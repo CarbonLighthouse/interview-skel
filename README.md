@@ -23,7 +23,7 @@ these models.
 ### Agenda
 
 First, let's briefly walk through the stubbed out API and other code we've
-provided. That should give you a sense of the various domain concepts invovled
+provided. That should give you a sense of the various domain concepts involved
 as well as the capabilities of the stubbed API.
 
 Next, we will provide a few high-level product requirements for the "Energy
@@ -46,7 +46,7 @@ Analyzer" application. At that point we'll then hand it over to you to:
 
 NOTE: For this section, I'll be role-playing in a "PM" type role. The product
 requirements are not super fleshed out, and may not be well informed by the
-backend capbilities we actually have.
+backend capabilities we actually have.
 
 -   [MVP] As a building owner, I need to understand the how the energy usage of
     my building would change after certain EEMs were implemented, both on a
