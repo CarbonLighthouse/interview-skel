@@ -44,9 +44,9 @@ Analyzer" application. At that point we'll then hand it over to you to:
 
 ### High Level Product Requirements:
 
-NOTE: For this section, I'll be role-playing in a "PM" type role. The product
-requirements are not super fleshed out, and may not be well informed by the
-backend capabilities we actually have.
+NOTE: For this section, your interviewer will be role-playing in a "PM" type
+role. The product requirements are not super fleshed out, and may not be well
+informed by the backend capabilities we actually have.
 
 -   [MVP] As a building owner, I need to understand the how the energy usage of
     my building would change after certain EEMs were implemented, both on a
@@ -65,7 +65,7 @@ backend capabilities we actually have.
 Note to interviewee: For this section, I'll still be role-playing in a PM role,
 and as someone who doesn't have wireframe / design experience (which is why
 we're asking for your input on the UI). We'll focus on just the two MVP
-requirnments, and we can assume the user has already logged in, selected the
+requirements, and we can assume the user has already logged in, selected the
 building the want to analyze, etc.
 
 We'll hand it over to you to start sketching. The goal is not to have anything
