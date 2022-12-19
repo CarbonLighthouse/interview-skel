@@ -115,7 +115,3 @@ class TestChallengeTask(unittest.TestCase):
     def test_get_measure_savings_for_date_range(self):
         # write this test for the at-home challenge
         raise NotImplementedError()
-
-
-if __name__ == "__main__":
-    unittest.main()
