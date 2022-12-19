@@ -54,7 +54,7 @@ class EnergyClient:
             ),
             ...
             DataPoint(
-                timestamp=2021-010-16 22:00:00,
+                timestamp=2021-10-16 22:00:00,
                 value=1000
             ),
         ]
@@ -74,7 +74,7 @@ class EnergyClient:
 
             current_time += relativedelta(minutes=15)
 
-        # Not used for the at-home challenge
+        # Not used for the initial challenge
         # time.sleep(3)
 
         return results
@@ -115,7 +115,18 @@ class EnergyClient:
 
             current_time += relativedelta(minutes=15)
 
-        # Not used for the at-home challenge
+        # Not used for the initial challenge
         # time.sleep(3)
 
         return results
+
+    @staticmethod
+    def get_measure_expected_cost(
+        measure_type: MeasureType,
+    ) -> float:
+        """
+        This API call will return the estimated cost for a measure
+        """
+        # TODO
+
+        return 12
