@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Dict, List, Union
+from typing import List
 
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
@@ -127,6 +127,4 @@ class EnergyClient:
         """
         This API call will return the estimated cost for a measure
         """
-        # TODO
-
         return 12

@@ -1,7 +1,12 @@
 import unittest
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from models import Building, Measure, MeasureType, get_first_moment_of_month
+from energy_analyzer.models import (
+    Building,
+    Measure,
+    MeasureType,
+    get_first_moment_of_month,
+)
 
 start_of_month = get_first_moment_of_month(datetime.now())
 
@@ -77,9 +82,7 @@ class TestChallengeTask(unittest.TestCase):
     def test_get_past_and_future_year_of_monthly_energy_usage_with_measures(self):
         for building in (building_1, building_2):
             result_with_measures = (
-                building.get_past_and_future_year_of_monthly_energy_usage(
-                    include_measure_savings=True
-                )
+                building.get_past_and_future_year_of_monthly_energy_usage()
             )
             result_without_measures = (
                 building.get_past_and_future_year_of_monthly_energy_usage()
@@ -98,11 +101,11 @@ class TestChallengeTask(unittest.TestCase):
 
     # this should pass once the Challenge task has been completed correctly
     def test_partial_month_coverage(self):
-        result_partial_coverage = building_partial_month_coverage.get_past_and_future_year_of_monthly_energy_usage(
-            include_measure_savings=True
+        result_partial_coverage = (
+            building_partial_month_coverage.get_past_and_future_year_of_monthly_energy_usage()
         )
-        result_full_coverage = building_full_month_coverage.get_past_and_future_year_of_monthly_energy_usage(
-            include_measure_savings=True
+        result_full_coverage = (
+            building_full_month_coverage.get_past_and_future_year_of_monthly_energy_usage()
         )
 
         for partial_coverage, full_coverage in zip(
@@ -113,5 +116,4 @@ class TestChallengeTask(unittest.TestCase):
                 self.assertLess(full_coverage.value, partial_coverage.value)
 
     def test_get_measure_savings_for_date_range(self):
-        # write this test for the at-home challenge
         raise NotImplementedError()

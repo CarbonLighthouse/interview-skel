@@ -40,7 +40,8 @@ Analyzer" application. At that point we'll then hand it over to you to:
 ### Assumptions/Notes:
 
 -   We can ignore all user login / authentication concerns.
--   The thermo and ML models output timeseries data on consistent intervals.
+-   The thermo and ML models output timeseries data on consistent intervals
+    without any missing data.
 
 ### High Level Product Requirements:
 
