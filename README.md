@@ -41,7 +41,7 @@ Analyzer" application. At that point we'll then hand it over to you to:
 
 -   We can ignore all user login / authentication concerns.
 -   The thermo and ML models output timeseries data on consistent intervals
-    without any missing data.
+    without any missing points.
 
 ### High Level Product Requirements:
 
@@ -49,7 +49,7 @@ NOTE: For this section, your interviewer will be role-playing in a "PM" type
 role. The product requirements are not super fleshed out, and may not be well
 informed by the backend capabilities we actually have.
 
--   [MVP] As a building owner, I need to understand the how the energy usage of
+-   [MVP] As a building owner, I need to understand how the energy usage of
     my building would change after certain EEMs were implemented, both on a
     monthly and annual basis.
 -   [MVP] As a building owner, I can choose which EEMs are being used in the
